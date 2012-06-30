@@ -1,0 +1,77 @@
+create database smap;
+use smap;
+
+create table usuario(
+cod_usu int auto_increment,
+nome_usu varchar(100) not null unique,
+senha_usu varchar(30) not null,
+email_usu varchar(80),
+primary key (cod_usu)
+);
+
+insert into usuario values (0,"renanadm","adm123","renanadm@gmail.com");
+insert into usuario values (0,"adilsonadm","adm123","adilsonadm@gmail.com");
+insert into usuario values (0,"felipeadm","adm123","felipeadm@gmail.com");
+
+
+create table professor(
+cod_prof int auto_increment,
+nome_prof varchar(100) not null,
+cpf_prof varchar(20) not null unique,
+email_prof varchar(80),
+primary key (cod_prof)
+);
+
+insert into professor values (0,"Nao Definido","0","");
+insert into professor values (0,"professor1","111.111.111-11","professor1@gmail.com");
+insert into professor values (0,"professor2","222.222.222-22","professor2@gmail.com");
+insert into professor values (0,"professor3","333.333.333-33","professor3@gmail.com");
+
+create table disciplina(
+cod_dis int auto_increment,
+nome_dis varchar(100) not null,
+cargahoraria_dis int,
+tipo_dis varchar(30),
+cod_prof int,
+primary key(cod_dis),
+foreign key(cod_prof) references professor(cod_prof)
+);
+
+
+insert into disciplina values (0,"Calculo 1",200,"Obrigatoria",1);
+insert into disciplina values (0,"Calculo 2",200,"Obrigatoria",2);
+insert into disciplina values (0,"Calculo 3",300,"Obrigatoria",3);
+
+
+create table curso(
+cod_curso int auto_increment,
+nome_curso varchar(100) not null,
+tipo_curso varchar(50),
+ano_inic_curso int,
+duracao_curso int not null,
+primary key(cod_curso)
+);
+
+insert into curso values (0,"Ciencia da Computacao","Mestrado",2010,4);
+insert into curso values (0,"Sistemas de Informacao","Doutorado",2009,3);
+insert into curso values (0,"Matematica Aplicada","Mestrado",2011,4);
+
+create table aluno(
+cod_al int auto_increment,
+nome_al varchar(100) not null,
+cpf_al varchar(20) not null unique,
+tel_al varchar(20),
+cel_al varchar(20),
+bolsista_al varchar(5),
+dataingresso_al date not null,
+email_al varchar(80),
+linhapesq_al varchar(100),
+cod_prof int,
+cod_curso int not null,
+primary key (cod_al),
+foreign key(cod_prof) references professor(cod_prof),
+foreign key(cod_curso) references curso(cod_curso)
+);
+
+insert into aluno values (0,"Zezinho","222.222.222-22","(12) 9999-9999","(12) 9999-9999","Sim","2010-01-01","zezinho@gmail.com","Matematica Aplicada",1,1);
+insert into aluno values (0,"Pedrinho","111.111.111-11","(12) 8888-8888","(12) 8888-8888","Sim","2012-12-21","pedrinho@gmail.com","Fisica Quantica",2,2);

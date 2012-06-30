@@ -1,0 +1,82 @@
+create database passagemOnibus;
+use passagemOnibus;
+
+create table Onibus(
+onibusId int auto_increment,
+onibusCodId varchar(50) not null unique,
+onibusModelo varchar(50) not null,
+onibusMarca varchar(50) not null,
+onibusAno int not null,
+onibusQtdeAssentos int not null,
+primary key (onibusId)
+);
+
+create table Motorista(
+motoristaId int auto_increment,
+motoristaNome varchar(100) not null,
+motoristaRg varchar(13) not null,
+motoristaCpf varchar(14) not null,
+motoristaEnd varchar(200) not null,
+motoristaTel varchar(15),
+motoristaEmail varchar(50),
+primary key (motoristaId)
+);
+
+create table Estado(
+estadoId int auto_increment,
+estadoNome  varchar(100) not null,
+primary key(estadoId)
+);
+
+create table Cidade(
+cidadeId int auto_increment,
+cidadeNome varchar(100) not null,
+cidadeEstadoId int not null,
+primary key(cidadeId),
+foreign key(cidadeEstadoId) references Estado(estadoId)
+);
+
+create table Login(
+loginId int auto_increment,
+loginUsuario varchar(100) not null unique,
+loginSenha varchar(30) not null,
+primary key (loginId)
+);
+
+insert into Onibus values (0,"G550","Serie F - F250","Scania",2009,58);
+insert into Onibus values (0,"L450","Serie F - F310","Scania",2010,66);
+insert into Onibus values (0,"L500","Serie K - K250","Scania",2008,58);
+insert into Onibus values (0,"P100","Serie K - K310","Scania",2010,66);
+insert into Onibus values (0,"L1000","O-500 M","Mercedes-Benz",2011,46);
+insert into Onibus values (0,"G150","O-500 R","Mercedes-Benz",2011,48);
+
+insert into Motorista values (0,"Jose da Silva","43.567.986-2","234.543.574-34","Rua 1, no 450 - Jd. Queiroz", "(12) 9753.2553", "jose.silva@onibus.br");
+insert into Motorista values (0,"Marco Antonio Matos","48.522.677-7","567.432.123-24","Rua 2, no 460 - Jd. Queiroz", "(12) 9852.1343", "m.matos@onibus.br");
+insert into Motorista values (0,"Pablo Jose Alencar","47.111.422-8","124.533.131-11","Rua 3, no 470 - Jd. Queiroz", "(12) 9124.5311", "p.alencar@onibus.br");
+insert into Motorista values (0,"Jose Moureira","41.121.933-1","379.988.313-33","Rua 4, no 480 - Jd. Queiroz", "(12) 9789.2112", "j.moureira@onibus.br");
+insert into Motorista values (0,"Reinaldo Souza","42.467.852-x","234.134.567-25","Rua 5, no 490 - Jd. Queiroz", "(12) 8854.3572", "r.souza@onibus.br");
+insert into Motorista values (0,"Mauro Pereira","43.642.432-2","230.652.578-67","Rua 6, no 410 - Jd. Queiroz", "(12) 9123.4321", "mauro.pereira@onibus.br");
+insert into Motorista values (0,"Hugo Moraes","44.345.146-x","698.689.764-89","Rua 7, no 420 - Jd. Queiroz", "(12) 9235.6785", "h.moraes@onibus.br");
+insert into Motorista values (0,"Gabriel Almeida","45.124.864-6","178.532.894-11","Rua 8, no 430 - Jd. Queiroz", "(12) 9986.1334", "g.almeida@onibus.br");
+insert into Motorista values (0,"Guilherme Amorim","46.591.123-5","274.357.904-74","Rua 9, no 440 - Jd. Queiroz", "(12) 9734.2222", "g.amorim@onibus.br");
+
+insert into Estado values (0,"Sao Paulo");
+insert into Estado values (0,"Minas Gerais");
+insert into Estado values (0,"Rio de Janeiro");
+insert into Estado values (0,"Parana");
+insert into Estado values (0,"Santa Catarina");
+
+insert into Cidade values (0,"Sao Jose dos Campos", 1);
+insert into Cidade values (0,"Aparecida do Norte", 1);
+insert into Cidade values (0,"Santo Andre", 1);
+insert into Cidade values (0,"Rezende", 3);
+insert into Cidade values (0,"Niteroi", 3);
+insert into Cidade values (0,"Itajuba", 2);
+insert into Cidade values (0,"Pouso Alegre", 2);
+insert into Cidade values (0,"Cianorte", 4);
+insert into Cidade values (0,"Curitiba", 4);
+insert into Cidade values (0,"Florianopolis", 5);
+insert into Cidade values (0,"Bombinhas", 5);
+
+insert into Login values (0,"r.aguiar","senha1");
+insert into Login values (0,"a.martins","senha2");
