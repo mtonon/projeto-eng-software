@@ -1,9 +1,10 @@
 package dao;
 
+import util.BancoDados;
 import java.sql.*;
 import java.util.ArrayList;
 
-import classe.Funcionario;
+import entidades.Funcionario;
 
 public class DaoFuncionario {
 

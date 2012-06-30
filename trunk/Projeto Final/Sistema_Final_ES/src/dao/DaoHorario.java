@@ -1,13 +1,13 @@
 package dao;
 
-import cadastro_rota.Horario;
+import entidades.Horario;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import dao.BancoDados;
-import classe.Rota;
+import util.BancoDados;
+import entidades.Rota;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 

@@ -1,9 +1,10 @@
 package dao;
 
+import util.BancoDados;
 import java.sql.*;
 import java.util.ArrayList;
 
-import classe.Cidade;
+import entidades.Cidade;
 
 public class DaoCidade {
 

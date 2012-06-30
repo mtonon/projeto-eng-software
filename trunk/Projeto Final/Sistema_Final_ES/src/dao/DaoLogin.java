@@ -1,8 +1,9 @@
 package dao;
 
+import util.BancoDados;
 import java.sql.*;
 
-import classe.Funcionario;
+import entidades.Funcionario;
 
 public class DaoLogin {
     

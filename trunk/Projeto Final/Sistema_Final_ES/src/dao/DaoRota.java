@@ -1,5 +1,6 @@
 package dao;
 
+import entidades.Rota;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -7,11 +8,35 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import classe.Rota;
+import util.BancoDados;
 
 public class DaoRota {
-	
-	public int cadastrarRota(Rota rota) {
+
+    public ArrayList<Rota> carregaRotas(int id) {
+        DaoItinerario daoItinerario = new DaoItinerario(); //para nao replicar cod para consulta do nome da cidade!
+        ArrayList<Rota> arrayList = new ArrayList<Rota>();
+        BancoDados banco = new BancoDados();
+        try {
+            Class.forName(banco.getDriver());
+            Connection conn = DriverManager.getConnection(banco.getStr_conn(), banco.getUsuario(), banco.getSenha());
+            Statement stmt = conn.createStatement();
+            String sql = "select * from Rota where rota_cidadeOrigem = " + id + "";
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) { // criando arrayList de itinerario
+                arrayList.add(new Rota(rs.getString("rotaId"), rs.getString("rota_cidadeOrigem"), rs.getString("rota_cidadeDestino"), daoItinerario.consultaCidade(rs.getString("rota_cidadeOrigem")), daoItinerario.consultaCidade(rs.getString("rota_cidadeDestino")), rs.getString("rotaDuracao")));
+            }
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Não foi possivel carregar o driver.");
+            ex.printStackTrace();
+        } catch (SQLException ex) {
+            System.out.println("Problema com SQL.");
+            ex.printStackTrace();
+        }
+
+        return arrayList;
+    }
+
+    public int cadastrarRota(Rota rota) {
         BancoDados banco = new BancoDados();
         try {
             Class.forName(banco.getDriver());
@@ -20,13 +45,13 @@ public class DaoRota {
             String sql = "SELECT * FROM Rota WHERE Rota_CidadeOrigem = " + rota.getRota_cidadeOrigemId() + " AND Rota_CidadeDestino = " + rota.getRota_cidadeDestinoId();
             ResultSet rs = stmt.executeQuery(sql);
             if (rs.next()) {
-                    return 1;
+                return 1;
             }
-            if(rota.getRota_cidadeOrigemId() != rota.getRota_cidadeDestinoId()){
-	            sql = "INSERT INTO Rota VALUES (0, " + rota.getRota_cidadeOrigemId() + ", " + rota.getRota_cidadeDestinoId()+ ", '" + rota.getRotaDuracao() +"')";
-	            stmt.executeUpdate(sql);
-            }else{
-            	return 2;
+            if (rota.getRota_cidadeOrigemId() != rota.getRota_cidadeDestinoId()) {
+                sql = "INSERT INTO Rota VALUES (0, " + rota.getRota_cidadeOrigemId() + ", " + rota.getRota_cidadeDestinoId() + ", '" + rota.getRotaDuracao() + "')";
+                stmt.executeUpdate(sql);
+            } else {
+                return 2;
             }
         } catch (ClassNotFoundException ex) {
             System.out.println("Não foi possivel carregar o driver.");
@@ -44,21 +69,21 @@ public class DaoRota {
             Class.forName(banco.getDriver());
             Connection conn = DriverManager.getConnection(banco.getStr_conn(), banco.getUsuario(), banco.getSenha());
             Statement stmt = conn.createStatement();
-            String sql = "SELECT * FROM Rota WHERE Rota_CidadeOrigem = " + rota.getRota_cidadeOrigemId() + " AND Rota_CidadeDestino = " + rota.getRota_cidadeDestinoId()+ " AND RotaDuracao = '"+rota.getRotaDuracao()+"'";
+            String sql = "SELECT * FROM Rota WHERE Rota_CidadeOrigem = " + rota.getRota_cidadeOrigemId() + " AND Rota_CidadeDestino = " + rota.getRota_cidadeDestinoId() + " AND RotaDuracao = '" + rota.getRotaDuracao() + "'";
             ResultSet rs = stmt.executeQuery(sql);
             if (rs.next()) {
-                    return 1;
+                return 1;
             }
-            sql = "SELECT * FROM RotaItinerario WHERE RotaItinerario_RotaId = "+ rota.getId() ;
+            sql = "SELECT * FROM RotaItinerario WHERE RotaItinerario_RotaId = " + rota.getId();
             rs = stmt.executeQuery(sql);
-            if(rs.next()){
+            if (rs.next()) {
                 return 2;
             }
-            if(rota.getRota_cidadeOrigemId() != rota.getRota_cidadeDestinoId()){
-            	sql = "UPDATE Rota SET Rota_CidadeOrigem = " + rota.getRota_cidadeOrigemId() + ", Rota_CidadeDestino = " + rota.getRota_cidadeDestinoId() + ", RotaDuracao = '" + rota.getRotaDuracao() + "' WHERE RotaId = " + rota.getId() ;
+            if (rota.getRota_cidadeOrigemId() != rota.getRota_cidadeDestinoId()) {
+                sql = "UPDATE Rota SET Rota_CidadeOrigem = " + rota.getRota_cidadeOrigemId() + ", Rota_CidadeDestino = " + rota.getRota_cidadeDestinoId() + ", RotaDuracao = '" + rota.getRotaDuracao() + "' WHERE RotaId = " + rota.getId();
                 stmt.executeUpdate(sql);
-            }else{
-            	return 3;
+            } else {
+                return 3;
             }
         } catch (ClassNotFoundException ex) {
             System.out.println("Não foi possivel carregar o driver.");
@@ -76,9 +101,9 @@ public class DaoRota {
             Class.forName(banco.getDriver());
             Connection conn = DriverManager.getConnection(banco.getStr_conn(), banco.getUsuario(), banco.getSenha());
             Statement stmt = conn.createStatement();
-            String sql = "SELECT * FROM RotaItinerario WHERE RotaItinerario_RotaId = "+ rota.getId() ;
+            String sql = "SELECT * FROM RotaItinerario WHERE RotaItinerario_RotaId = " + rota.getId();
             ResultSet rs = stmt.executeQuery(sql);
-            if(rs.next()){
+            if (rs.next()) {
                 return false;
             }
             sql = "DELETE FROM Rota WHERE RotaId = " + rota.getId();
@@ -125,10 +150,10 @@ public class DaoRota {
             Class.forName(banco.getDriver());
             Connection conn = DriverManager.getConnection(banco.getStr_conn(), banco.getUsuario(), banco.getSenha());
             Statement stmt = conn.createStatement();
-            String sql=	"SELECT RotaId, origem.CidadeNome, origem.CidadeId, destino.CidadeNome, destino.CidadeId, RotaDuracao " +
-            			"FROM Rota " +
-            			"INNER JOIN Cidade AS origem ON (Rota_CidadeOrigem = origem.CidadeId) " +
-            			"INNER JOIN Cidade AS destino ON(destino.CidadeId = Rota_CidadeDestino) order by origem.CidadeNome, destino.CidadeNome";
+            String sql = "SELECT RotaId, origem.CidadeNome, origem.CidadeId, destino.CidadeNome, destino.CidadeId, RotaDuracao "
+                    + "FROM Rota "
+                    + "INNER JOIN Cidade AS origem ON (Rota_CidadeOrigem = origem.CidadeId) "
+                    + "INNER JOIN Cidade AS destino ON(destino.CidadeId = Rota_CidadeDestino) order by origem.CidadeNome, destino.CidadeNome";
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 Rota rota = new Rota();
@@ -150,4 +175,16 @@ public class DaoRota {
         return arrayList;
     }
 
+    public static void main(String[] args) {
+        ArrayList<Rota> rotas = new ArrayList<Rota>();
+        DaoRota in = new DaoRota();
+        rotas = in.carregaRotas(1);
+
+        for (int i = 0; i < rotas.size(); i++) {
+            System.out.println(rotas.get(i).getRota_cidadeOrigem());
+            System.out.println(rotas.get(i).getRota_cidadeDestino());
+            System.out.println(rotas.get(i).getRotaDuracao());
+
+        }
+    }
 }
